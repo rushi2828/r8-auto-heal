@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: r8-auto-heal
+  labels:
+    app: r8-auto-heal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: r8-auto-heal
+  template:
+    metadata:
+      labels:
+        app: r8-auto-heal
+    spec:
+      containers:
+      - name: app
+        image: rushi2323/r8-auto-heal:v2
+        ports:
+        - containerPort: 8000
+        env:
+        - name: APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: r8-auto-heal-config
+              key: APP_NAME
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: r8-auto-heal-config
+              key: LOG_LEVEL
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 5
