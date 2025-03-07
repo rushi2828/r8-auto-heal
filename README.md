@@ -130,4 +130,3 @@ annotations:
 ## ✍️ Author
 [Rushi2828](https://github.com/rushi2828)
 
-Happy Automating 🚀!
