@@ -1,0 +1,27 @@
+groups:
+- name: HealthAlerts
+  rules:
+  - alert: UnhealthyPod
+    expr: kube_pod_container_status_ready == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Pod is not ready"
+      description: "The pod {{ $labels.pod }} is not healthy"
+  - alert: HighCpuUsage
+    expr: sum(rate(container_cpu_usage_seconds_total{container_name!="POD",pod=~"{{ $labels.pod }}"}[5m])) by (pod) / sum(kube_pod_container_resource_limits_cpu_cores{container_name!="POD",pod=~"{{ $labels.pod }}"}) by (pod) * 100 > 80
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU usage"
+      description: "The pod {{ $labels.pod }} is using more than 80% of its CPU limit"
+  - alert: HighMemoryUsage
+    expr: sum(container_memory_working_set_bytes{container_name!="POD",pod=~"{{ $labels.pod }}"} / kube_pod_container_resource_limits_memory_bytes{container_name!="POD",pod=~"{{ $labels.pod }}"}) by (pod) * 100 > 80
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High memory usage"
+      description: "The pod {{ $labels.pod }} is using more than 80% of its memory limit"
