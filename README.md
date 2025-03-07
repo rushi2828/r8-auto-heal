@@ -11,5 +11,10 @@ r8-auto-heal/
 │   ├── deployment.yaml   # Deployment with Liveness and Readiness probes
 │   ├── service.yaml      # Service manifest
 │   ├── configmap.yaml    # ConfigMap for environment variables
-└── README.md             # Project documentation
+│   └── prometheus/        # Prometheus setup
+│       ├── prometheus-config.yaml    # Prometheus configuration
+│       ├── alert-rules.yaml          # Custom alert rules
+│       ├── alertmanager-config.yaml  # Alertmanager configuration
+└── README.md             # Documentation
+
 ```
